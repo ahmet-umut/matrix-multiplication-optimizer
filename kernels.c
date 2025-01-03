@@ -76,7 +76,7 @@ void normalize(int dim, float *src, float *dst)
 			//else if (src[RIDX(i, j, dim)] > max)
 			else if (srcmatr[i][j] > max)
 				max = src[RIDX(i, j, dim)];
-		}
+		} 
 	}
 
 	for (int i = 0; i < dim; i++) {
