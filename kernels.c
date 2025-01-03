@@ -137,9 +137,9 @@ void naive_kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float
 char kronecker_product_descr[] = "Kronecker Product: Current working version";
 void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod)
 {
-    float(*matrix1)[dim1] = (float(*)[dim1]) mat1; // cast mat1 to 2D array
-    float(*matrix2)[dim2] = (float(*)[dim2]) mat2; // cast mat2 to 2D array
-    float(*product)[dim1 * dim2] = (float(*)[dim1 * dim2]) prod; // cast prod to 2D array
+    float(* matrix1)[dim1] = (float(*)[dim1]) mat1; // cast mat1 to 2D array
+    float(* matrix2)[dim2] = (float(*)[dim2]) mat2; // cast mat2 to 2D array
+    float(* const product)[dim1 * dim2] = (float(*)[dim1 * dim2]) prod; // cast prod to 2D array
 
     for (float(*i)[dim1] = matrix1; i < matrix1 + dim1; i++)
     {
@@ -152,15 +152,16 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
             //for (int k = 0; k < dim2; k++)
             for (float(*k)[dim2] = matrix2; k < matrix2 + dim2; k++)
             {
-                const int value3 = k-matrix2 + value1;
-                float (* const value5) = *k+dim2;
+                //const int value3 = k-matrix2 + value1;
+                float(* value3) = product[k - matrix2 + value1];
+                const float (* const value5) = *k+dim2;
                 //for (int l = 0; l < dim2; l++)
                 for (float(*l) = *k; l < value5; l++)
                 {
                     //prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
                     //product[i * dim2 + k][j * dim2 + l] = matrix1[i][j] * matrix2[k][l];
                     //product[(i - matrix1) * dim2 + (k - matrix2)][(j - *i) * dim2 + (l - *k)] = *j * *l;
-                    product[value3][value2 + (l - *k)] = value4 * *l;
+                    value3[value2 + (l - *k)] = value4 * *l;
                 }
             }
         }
