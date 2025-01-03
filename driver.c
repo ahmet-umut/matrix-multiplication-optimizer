@@ -391,8 +391,8 @@ void test_krpro(int bench_index) {
             double dimension = (double) dim;
             double work = dimension * dimension;
 #ifdef DEBUG
-            printf("DEBUG: dimension=%.1f\n",dimension);
-            printf("DEBUG: work=%.1f\n",work);
+            printf("DEBUG: dimension=%.2f\n",dimension);
+            printf("DEBUG: work=%.2f\n",work);
 #endif
             int tmp_type = 5;
             arglist[0] = &tmp_type;
@@ -423,13 +423,13 @@ void test_krpro(int bench_index) {
 
     printf("Your CPEs");
     for (i = 0; i < DIM_CNT; i++) {
-        printf("\t%.1f", benchmarks_krpro[bench_index].cpes[i]);
+        printf("\t%.2f", benchmarks_krpro[bench_index].cpes[i]);
     }
     printf("\n");
 
     printf("Baseline CPEs");
     for (i = 0; i < DIM_CNT; i++) {
-        printf("\t%.1f", krpro_baseline_cpes[i]);
+        printf("\t%.2f", krpro_baseline_cpes[i]);
     }
     printf("\n");
 
@@ -447,12 +447,12 @@ void test_krpro(int bench_index) {
                 exit(EXIT_FAILURE);
             }
             prod *= ratio;
-            printf("\t%.1f", ratio);
+            printf("\t%.2f", ratio);
         }
 
         /* Geometric mean */
         mean = pow(prod, 1.0 / (double) DIM_CNT);
-        printf("\t%.1f", mean);
+        printf("\t%.2f", mean);
         printf("\n\n");
         if (mean > krpro_maxmean) {
             krpro_maxmean = mean;
@@ -514,8 +514,8 @@ void test_norm(int bench_index) {
             double dimension = (double) dim;
             double work = dimension * dimension;
 #ifdef DEBUG
-            printf("DEBUG: dimension=%.1f\n",dimension);
-            printf("DEBUG: work=%.1f\n",work);
+            printf("DEBUG: dimension=%.2f\n",dimension);
+            printf("DEBUG: work=%.2f\n",work);
 #endif
             int tmp_type = 3;
             arglist[0] = &tmp_type;
@@ -544,13 +544,13 @@ void test_norm(int bench_index) {
 
     printf("Your CPEs");
     for (i = 0; i < DIM_CNT; i++) {
-        printf("\t%.1f", benchmarks_norm[bench_index].cpes[i]);
+        printf("\t%.2f", benchmarks_norm[bench_index].cpes[i]);
     }
     printf("\n");
 
     printf("Baseline CPEs");
     for (i = 0; i < DIM_CNT; i++) {
-        printf("\t%.1f", norm_baseline_cpes[i]);
+        printf("\t%.2f", norm_baseline_cpes[i]);
     }
     printf("\n");
 
@@ -568,12 +568,12 @@ void test_norm(int bench_index) {
                 exit(EXIT_FAILURE);
             }
             prod *= ratio;
-            printf("\t%.1f", ratio);
+            printf("\t%.2f", ratio);
         }
 
         /* Geometric mean */
         mean = pow(prod, 1.0 / (double) DIM_CNT);
-        printf("\t%.1f", mean);
+        printf("\t%.2f", mean);
         printf("\n\n");
         if (mean > norm_maxmean) {
             norm_maxmean = mean;
@@ -784,26 +784,12 @@ int main(int argc, char *argv[]) {
 
 
     if (autograder) {
-        printf("\nbestscores:%.1f:%.1f:\n", norm_maxmean, krpro_maxmean);
+        printf("\nbestscores:%.2f:%.2f:\n", norm_maxmean, krpro_maxmean);
     } else {
         printf("Summary of Your Best Scores:\n");
-        printf("  Normalization: %3.1f (%s)\n", norm_maxmean, norm_maxmean_desc);
-        printf("  Kronecker Product: %3.1f (%s)\n", krpro_maxmean, krpro_maxmean_desc);
+        printf("  Normalization: %3.2f (%s)\n", norm_maxmean, norm_maxmean_desc);
+        printf("  Kronecker Product: %3.2f (%s)\n", krpro_maxmean, krpro_maxmean_desc);
     }
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
