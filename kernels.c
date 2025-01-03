@@ -69,7 +69,7 @@ void normalize(int dim, float *src, float *dst)
             if (src[RIDX(i, j, dim)] < min) {
                 min = src[RIDX(i, j, dim)];
             }
-            if (src[RIDX(i, j, dim)] > max) {
+            else if (src[RIDX(i, j, dim)] > max) {
                 max = src[RIDX(i, j, dim)];
             }
         }
