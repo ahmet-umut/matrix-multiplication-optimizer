@@ -98,6 +98,7 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
 		float (* const rowdim) = *row+dim;
+		#pragma GCC unroll 4
 		for (float(*cell)=*row; cell<rowdim; cell+=2)
 		{
 			min3(&min, cell[0], cell[1]);
@@ -115,9 +116,11 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
-		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell++,srccell++)
+		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
-			*dstcell = (*srccell-min) / range;
+			//*dstcell = (*srccell-min) / range;
+			dstcell[0] = (srccell[0]-min) / range;
+			dstcell[1] = (srccell[1]-min) / range;
 		}
 	}
 }
