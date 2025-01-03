@@ -58,6 +58,22 @@ void naive_normalize(int dim, float *src, float *dst) {
  * normalize - Your current working version of normalization
  * IMPORTANT: This is the version you will be graded on
  */
+
+inline void min3(float* const min, const float b, const float c)
+{
+	if (b<*min)
+		*min = b;
+	if (c<*min)
+		*min = c;
+}
+inline void max3(float* const max, const float b, const float c)
+{
+	if (b>*max)
+		*max = b;
+	if (c>*max)
+		*max = c;
+}
+
 char normalize_descr[] = "Normalize: Current working version";
 void normalize(int dim, float *src, float *dst)
 {
@@ -84,10 +100,8 @@ void normalize(int dim, float *src, float *dst)
 		float (* const rowdim) = *row+dim;
 		for (float(*cell)=*row; cell<rowdim; cell+=2)
 		{
-			if (cell[0] < min)	min = cell[0];
-			else if (cell[0] > max)	max = cell[0];
-			if (cell[1] < min)	min = cell[1];
-			else if (cell[1] > max)	max = cell[1];
+			min3(&min, cell[0], cell[1]);
+			max3(&max, cell[0], cell[1]);
 		}
 	}
 
