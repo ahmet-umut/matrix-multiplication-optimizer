@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "defs.h"
-#include <immintrin.h>
+//#include <immintrin.h>
+#include <math.h>
 /*
  * Please fill in the following team_t struct
  */
@@ -80,17 +81,29 @@ void normalize(int dim, float *src, float *dst)
 	} */
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
-		for (float(*cell)=*row; cell<*row+dim; cell++)
+		float (* const rowdim) = *row+dim;
+		for (float(*cell)=*row; cell<rowdim; cell+=2)
 		{
-			if (*cell < min)	min=*cell;
-			else if (*cell > max)	max=*cell;
+			if (cell[0] < min)	min = cell[0];
+			else if (cell[0] > max)	max = cell[0];
+			if (cell[1] < min)	min = cell[1];
+			else if (cell[1] > max)	max = cell[1];
 		}
 	}
 
-	for (int i = 0; i < dim; i++) {
+	/* for (int i = 0; i < dim; i++) {
 		for (int j = 0; j < dim; j++) {
 			//dst[RIDX(i, j, dim)] = (src[RIDX(i, j, dim)] - min) / (max - min);
 			dstmatr[i][j] = (srcmatr[i][j] - min) / (max - min);
+		}
+	} */
+	const float range = max-min;
+	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
+	{
+		float(* const value1) = *dstrow+dim;
+		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell++,srccell++)
+		{
+			*dstcell = (*srccell-min) / range;
 		}
 	}
 }
