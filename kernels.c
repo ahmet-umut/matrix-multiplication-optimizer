@@ -143,22 +143,23 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
 
     for (float(*i)[dim1] = matrix1; i < matrix1 + dim1; i++)
     {
-        int i1 = dim2 * (i-matrix1);
+        const int value1 = dim2 * (i-matrix1);
         //for (int j = 0; j < dim1; j++)
         for (float(*j) = *i; j < *i + dim1; j++)
         {
-            int j1 = (j - *i) * dim2;
+            const int value2 = (j - *i) * dim2;
+            const float value4 = *j;
             //for (int k = 0; k < dim2; k++)
             for (float(*k)[dim2] = matrix2; k < matrix2 + dim2; k++)
             {
-                int k1 = k-matrix2;
+                const int value3 = k-matrix2 + value1;
                 //for (int l = 0; l < dim2; l++)
                 for (float(*l) = *k; l < *k + dim2; l++)
                 {
                     //prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
                     //product[i * dim2 + k][j * dim2 + l] = matrix1[i][j] * matrix2[k][l];
                     //product[(i - matrix1) * dim2 + (k - matrix2)][(j - *i) * dim2 + (l - *k)] = *j * *l;
-                    product[i1 + k1][j1 + (l - *k)] = *j * *l;
+                    product[value3][value2 + (l - *k)] = value4 * *l;
                 }
             }
         }
