@@ -141,18 +141,24 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
     float(*matrix2)[dim2] = (float(*)[dim2]) mat2; // cast mat2 to 2D array
     float(*product)[dim1 * dim2] = (float(*)[dim1 * dim2]) prod; // cast prod to 2D array
 
-    for (int i = 0; i < dim1; i++)
+    for (float(*i)[dim1] = matrix1; i < matrix1 + dim1; i++)
     {
-        const int i_dim2 = i * dim2;
-        for (int j = 0; j < dim1; j++)
+        int i1 = dim2 * (i-matrix1);
+        //for (int j = 0; j < dim1; j++)
+        for (float(*j) = *i; j < *i + dim1; j++)
         {
-            const int j_dim2 = j * dim2;
-            for (int k = 0; k < dim2; k++)
+            int j1 = (j - *i) * dim2;
+            //for (int k = 0; k < dim2; k++)
+            for (float(*k)[dim2] = matrix2; k < matrix2 + dim2; k++)
             {
-                for (int l = 0; l < dim2; l++)
+                int k1 = k-matrix2;
+                //for (int l = 0; l < dim2; l++)
+                for (float(*l) = *k; l < *k + dim2; l++)
                 {
                     //prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
-                    product[i_dim2 + k][j_dim2 + l] = matrix1[i][j] * matrix2[k][l];
+                    //product[i * dim2 + k][j * dim2 + l] = matrix1[i][j] * matrix2[k][l];
+                    //product[(i - matrix1) * dim2 + (k - matrix2)][(j - *i) * dim2 + (l - *k)] = *j * *l;
+                    product[i1 + k1][j1 + (l - *k)] = *j * *l;
                 }
             }
         }
