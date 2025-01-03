@@ -67,7 +67,7 @@ void normalize(int dim, float *src, float *dst)
 	min = src[0];
 	max = src[0];
 
-	for (int i = 0; i < dim; i++) {
+/* 	for (int i = 0; i < dim; i++) {
 		for (int j = 0; j < dim; j++) {
 	
 			//if (src[RIDX(i, j, dim)] < min)
@@ -77,6 +77,14 @@ void normalize(int dim, float *src, float *dst)
 			else if (srcmatr[i][j] > max)
 				max = src[RIDX(i, j, dim)];
 		} 
+	} */
+	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
+	{
+		for (float(*cell)=*row; cell<*row+dim; cell++)
+		{
+			if (*cell < min)	min=*cell;
+			else if (*cell > max)	max=*cell;
+		}
 	}
 
 	for (int i = 0; i < dim; i++) {
@@ -97,7 +105,7 @@ void normalize(int dim, float *src, float *dst)
 
 void register_normalize_functions() {
 	//add_normalize_function(&naive_normalize, naive_normalize_descr);
-	//add_normalize_function(&normalize, normalize_descr);
+	add_normalize_function(&normalize, normalize_descr);
 	/* ... Register additional test functions here */
 }
 
@@ -190,7 +198,6 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
 
 void register_kronecker_product_functions() {
 	//add_kronecker_product_function(&naive_kronecker_product, naive_kronecker_product_descr);
-	add_kronecker_product_function(&kronecker_product, kronecker_product_descr);
+	//add_kronecker_product_function(&kronecker_product, kronecker_product_descr);
 	/* ... Register additional test functions here */
 }
-
