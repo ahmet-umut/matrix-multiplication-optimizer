@@ -158,7 +158,7 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
                 const float (* const value5) = *k+dim2;
                 //for (int l = 0; l < dim2; l++)
 				int value6 = value2;
-				#pragma GCC unroll 16
+				#pragma GCC unroll 4
                 for (float(*l) = *k; l < value5; l++)
                 {
                     //prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
