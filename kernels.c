@@ -59,7 +59,27 @@ void naive_normalize(int dim, float *src, float *dst) {
 char normalize_descr[] = "Normalize: Current working version";
 void normalize(int dim, float *src, float *dst)
 {
-    naive_normalize(dim,src,dst);
+    float min, max;
+    min = src[0];
+    max = src[0];
+
+    for (int i = 0; i < dim; i++) {
+        for (int j = 0; j < dim; j++) {
+	
+            if (src[RIDX(i, j, dim)] < min) {
+                min = src[RIDX(i, j, dim)];
+            }
+            if (src[RIDX(i, j, dim)] > max) {
+                max = src[RIDX(i, j, dim)];
+            }
+        }
+    }
+
+    for (int i = 0; i < dim; i++) {
+        for (int j = 0; j < dim; j++) {
+            dst[RIDX(i, j, dim)] = (src[RIDX(i, j, dim)] - min) / (max - min);
+        }
+    }
 }
 
 /*********************************************************************
