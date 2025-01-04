@@ -233,6 +233,6 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
 
 void register_kronecker_product_functions() {
 	//add_kronecker_product_function(&naive_kronecker_product, naive_kronecker_product_descr);
-	//add_kronecker_product_function(&kronecker_product, kronecker_product_descr);
+	add_kronecker_product_function(&kronecker_product, kronecker_product_descr);
 	/* ... Register additional test functions here */
 }
