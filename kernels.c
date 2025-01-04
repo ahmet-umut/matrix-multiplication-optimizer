@@ -59,19 +59,25 @@ void naive_normalize(int dim, float *src, float *dst) {
  * IMPORTANT: This is the version you will be graded on
  */
 
-inline void min3(float* const min, const float b, const float c)
+inline void min2(float* const min, const float b, const float c)
 {
-	if (b<*min)
-		*min = b;
-	if (c<*min)
-		*min = c;
+	b<*min?*min=b:0;
+	c<*min?*min=c:0;
 }
-inline void max3(float* const max, const float b, const float c)
+inline void max2(float* const max, const float b, const float c)
 {
-	if (b>*max)
-		*max = b;
-	if (c>*max)
-		*max = c;
+	b>*max?*max=b:0;
+	c>*max?*max=c:0;
+}
+inline void min4(float* const min, const float b, const float c, const float d, const float e)
+{
+	min2(min, b, c);
+	min2(min, d, e);
+}
+inline void max4(float* const max, const float b, const float c, const float d, const float e)
+{
+	max2(max, b, c);
+	max2(max, d, e);
 }
 
 char normalize_descr[] = "Normalize: Current working version";
@@ -98,11 +104,10 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
 		float (* const rowdim) = *row+dim;
-		#pragma GCC unroll 4
-		for (float(*cell)=*row; cell<rowdim; cell+=2)
+		#define extremum(value) (value)<min?min=(value):(value)>max?max=(value):0
+		for (float(*cell)=*row; cell<rowdim; cell++)
 		{
-			min3(&min, cell[0], cell[1]);
-			max3(&max, cell[0], cell[1]);
+			extremum(cell[0]);
 		}
 	}
 
@@ -112,15 +117,15 @@ void normalize(int dim, float *src, float *dst)
 			dstmatr[i][j] = (srcmatr[i][j] - min) / (max - min);
 		}
 	} */
-	const float range = max-min;
+	const float inverseRange = 1/(max-min);
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
 			//*dstcell = (*srccell-min) / range;
-			dstcell[0] = (srccell[0]-min) / range;
-			dstcell[1] = (srccell[1]-min) / range;
+			dstcell[0] = (srccell[0]-min) * inverseRange;
+			dstcell[1] = (srccell[1]-min) * inverseRange;
 		}
 	}
 }
