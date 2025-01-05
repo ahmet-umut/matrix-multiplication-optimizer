@@ -90,17 +90,6 @@ void normalize(int dim, float *src, float *dst)
 	min = src[0];
 	max = src[0];
 
-/* 	for (int i = 0; i < dim; i++) {
-		for (int j = 0; j < dim; j++) {
-	
-			//if (src[RIDX(i, j, dim)] < min)
-			if (srcmatr[i][j] < min)
-				min = src[RIDX(i, j, dim)];
-			//else if (src[RIDX(i, j, dim)] > max)
-			else if (srcmatr[i][j] > max)
-				max = src[RIDX(i, j, dim)];
-		} 
-	} */
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
 		float (* const rowdim) = *row+dim;
@@ -111,19 +100,14 @@ void normalize(int dim, float *src, float *dst)
 		}
 	}
 
-	/* for (int i = 0; i < dim; i++) {
-		for (int j = 0; j < dim; j++) {
-			//dst[RIDX(i, j, dim)] = (src[RIDX(i, j, dim)] - min) / (max - min);
-			dstmatr[i][j] = (srcmatr[i][j] - min) / (max - min);
-		}
-	} */
 	const float inverseRange = 1/(max-min);
+	//#pragma GCC ivdep
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
+		#pragma GCC unroll 2
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
-			//*dstcell = (*srccell-min) / range;
 			dstcell[0] = (srccell[0]-min) * inverseRange;
 			dstcell[1] = (srccell[1]-min) * inverseRange;
 		}
