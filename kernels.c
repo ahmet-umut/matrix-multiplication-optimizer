@@ -18,7 +18,8 @@ team_t team = {
 };
 
 #pragma GCC optimize("peel-loops")
-#pragma GCC optimize("predictive-commoning")
+//#pragma GCC optimize("predictive-commoning")
+#pragma GCC optimize("fast-math")
 
 /********************
  * NORMALIZATION KERNEL
