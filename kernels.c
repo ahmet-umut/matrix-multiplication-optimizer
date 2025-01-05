@@ -93,11 +93,11 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
 		float (* const rowdim) = *row+dim;
-		#define extremum(value) (value)<min?min=(value):(value)>max?max=(value):0
-		for (float(*cell)=*row; cell<rowdim; cell+=2)
+		//#define extremum(value) __builtin_expect((value)<min,0)?min=(value):__builtin_expect((value)>max,0)?max=(value):0
+		#define extremum(value) if (__builtin_expect((value)<min,0)) min=(value); else if (__builtin_expect((value)>max,0)) max=(value)
+		for (float(*cell)=*row; cell<rowdim; cell++)
 		{
 			extremum(cell[0]);
-			extremum(cell[1]);
 		}
 	}
 
