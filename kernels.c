@@ -96,11 +96,26 @@ void normalize(int dim, float *src, float *dst)
 		//#define extremum(value) __builtin_expect((value)<min,0)?min=(value):__builtin_expect((value)>max,0)?max=(value):0
 		#define extremum(value) if (__builtin_expect((value)<min,0)) min=(value); else if (__builtin_expect((value)>max,0)) max=(value)
 		//#pragma GCC unroll 2
-		__builtin_prefetch(row+1, 0, 0);
-		for (float(*cell)=*row; cell<rowdim; cell+=2)
-		{ 
+		__builtin_prefetch(row, 0, 1);
+		for (float(*cell)=*row; cell<rowdim; cell+=16)
+		{
+			__builtin_prefetch(cell+16, 0, 1);
 			extremum(cell[0]);
 			extremum(cell[1]);
+			extremum(cell[2]);
+			extremum(cell[3]);
+			extremum(cell[4]);
+			extremum(cell[5]);
+			extremum(cell[6]);
+			extremum(cell[7]);
+			extremum(cell[8]);
+			extremum(cell[9]);
+			extremum(cell[10]);
+			extremum(cell[11]);
+			extremum(cell[12]);
+			extremum(cell[13]);
+			extremum(cell[14]);
+			extremum(cell[15]);
 		}
 	}
 
@@ -109,13 +124,28 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
-		__builtin_prefetch(dstrow+1, 0, 0);
-		__builtin_prefetch(srcrow+1, 0, 0);
-		#pragma GCC unroll 2
-		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
+		__builtin_prefetch(dstrow, 0, 0);
+		__builtin_prefetch(srcrow, 0, 0);
+		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=16,srccell+=16)
 		{
+			__builtin_prefetch(dstcell+16, 0, 0);
+			__builtin_prefetch(srccell+16, 0, 0);
 			dstcell[0] = (srccell[0]-min) * inverseRange;
 			dstcell[1] = (srccell[1]-min) * inverseRange;
+			dstcell[2] = (srccell[2]-min) * inverseRange;
+			dstcell[3] = (srccell[3]-min) * inverseRange;
+			dstcell[4] = (srccell[4]-min) * inverseRange;
+			dstcell[5] = (srccell[5]-min) * inverseRange;
+			dstcell[6] = (srccell[6]-min) * inverseRange;
+			dstcell[7] = (srccell[7]-min) * inverseRange;
+			dstcell[8] = (srccell[8]-min) * inverseRange;
+			dstcell[9] = (srccell[9]-min) * inverseRange;
+			dstcell[10] = (srccell[10]-min) * inverseRange;
+			dstcell[11] = (srccell[11]-min) * inverseRange;
+			dstcell[12] = (srccell[12]-min) * inverseRange;
+			dstcell[13] = (srccell[13]-min) * inverseRange;
+			dstcell[14] = (srccell[14]-min) * inverseRange;
+			dstcell[15] = (srccell[15]-min) * inverseRange;
 		}
 	}
 }
