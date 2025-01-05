@@ -81,7 +81,7 @@ inline void max4(float* const max, const float b, const float c, const float d, 
 }
 
 char normalize_descr[] = "Normalize: Current working version";
-void normalize(int dim, float *src, float *dst)
+void normalize(int dim, float * restrict src, float * restrict dst)
 {
 	float(*srcmatr)[dim] = (float(*)[dim]) src; // cast src to 2D array
 	float(*dstmatr)[dim] = (float(*)[dim]) dst; // cast dst to 2D array
