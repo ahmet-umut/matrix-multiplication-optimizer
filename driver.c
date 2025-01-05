@@ -789,6 +789,8 @@ int main(int argc, char *argv[]) {
         printf("Summary of Your Best Scores:\n");
         printf("  Normalization: %3.2f (%s)\n", norm_maxmean, norm_maxmean_desc);
         printf("  Kronecker Product: %3.2f (%s)\n", krpro_maxmean, krpro_maxmean_desc);
+
+        printf("ratio of normalization to kronecker_product: %3.2f\n", norm_maxmean/krpro_maxmean);
     }
 
     return 0;
