@@ -17,6 +17,7 @@ team_t team = {
 
 };
 
+#pragma GCC optimize("unroll-loops")
 
 /********************
  * NORMALIZATION KERNEL
@@ -106,7 +107,7 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
-		#pragma GCC unroll 4
+		//#pragma GCC unroll 4
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
 			dstcell[0] = (srccell[0]-min) * inverseRange;
