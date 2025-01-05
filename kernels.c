@@ -98,7 +98,7 @@ void normalize(int dim, float *src, float *dst)
 		//#pragma GCC unroll 2
 		for (float(*cell)=*row; cell<rowdim; cell+=16)
 		{
-			__builtin_prefetch(cell+16, 0, 1);
+			__builtin_prefetch(cell+16, 0, 3);
 			extremum(cell[0]);
 			extremum(cell[1]);
 			extremum(cell[2]);
@@ -125,8 +125,8 @@ void normalize(int dim, float *src, float *dst)
 		float(* const value1) = *dstrow+dim;
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=16,srccell+=16)
 		{
-			__builtin_prefetch(dstcell+16, 0, 0);
-			__builtin_prefetch(srccell+16, 0, 0);
+			__builtin_prefetch(dstcell+16, 0, 3);
+			__builtin_prefetch(srccell+16, 0, 3);
 			dstcell[0] = (srccell[0]-min) * inverseRange;
 			dstcell[1] = (srccell[1]-min) * inverseRange;
 			dstcell[2] = (srccell[2]-min) * inverseRange;
@@ -220,16 +220,10 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
 				//for (int l = 0; l < dim2; l++)
 				int value6 = value2;
 
-				/* #pragma GCC unroll 4
-				for (float(*l) = *k; l < value5; l++)
-				{
-					//prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
-					//product[i * dim2 + k][j * dim2 + l] = matrix1[i][j] * matrix2[k][l];
-					//product[(i - matrix1) * dim2 + (k - matrix2)][(j - *i) * dim2 + (l - *k)] = *j * *l;
-					productrow[value6++] = value4 * *l;
-				} */
 				for (float(*l) = *k; l < value5; l+=4, value6+=4)
 				{
+					__builtin_prefetch(productrow+4, 0, 3);
+					__builtin_prefetch(l+4, 0, 3);
 					productrow[value6] = value4 * l[0];
 					productrow[value6+1] = value4 * l[1];
 					productrow[value6+2] = value4 * l[2];
