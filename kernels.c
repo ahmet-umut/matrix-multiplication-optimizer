@@ -194,7 +194,7 @@ void naive_kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float
  * IMPORTANT: This is the version you will be graded on
  */
 char kronecker_product_descr[] = "Kronecker Product: Current working version";
-void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod)
+void kronecker_product(int dim1, int dim2, float * restrict mat1, float *restrict mat2, float *restrict prod)
 {
 	float(* matrix1)[dim1] = (float(*)[dim1]) mat1; // cast mat1 to 2D array
 	float(* matrix2)[dim2] = (float(*)[dim2]) mat2; // cast mat2 to 2D array
