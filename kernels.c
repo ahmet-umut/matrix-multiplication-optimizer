@@ -96,7 +96,7 @@ void normalize(int dim, float *src, float *dst)
 		//#define extremum(value) __builtin_expect((value)<min,0)?min=(value):__builtin_expect((value)>max,0)?max=(value):0
 		#define extremum(value) if (__builtin_expect((value)<min,0)) min=(value); else if (__builtin_expect((value)>max,0)) max=(value)
 		//#pragma GCC unroll 2
-		//__builtin_prefetch(row+1);
+		__builtin_prefetch(row+1, 0, 0);
 		for (float(*cell)=*row; cell<rowdim; cell+=2)
 		{ 
 			extremum(cell[0]);
