@@ -109,6 +109,8 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
+		__builtin_prefetch(dstrow+1, 0, 0);
+		__builtin_prefetch(srcrow+1, 0, 0);
 		#pragma GCC unroll 2
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
