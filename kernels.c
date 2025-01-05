@@ -93,19 +93,20 @@ void normalize(int dim, float *src, float *dst)
 	for (float(*row)[dim]=srcmatr; row<srcmatr+dim; row++)
 	{
 		float (* const rowdim) = *row+dim;
-		#define extremum(value) (value)<min?min=(value):(value)>max?max=(value):0
-		for (float(*cell)=*row; cell<rowdim; cell++)
+		//#define extremum(value) (value)<min?min=(value):(value)>max?max=(value):0
+		#define extremum(value) if (__builtin_expect((value)<min, 0)) min=(value); else if (__builtin_expect((value)>max, 0)) max=(value);
+		for (float(*cell)=*row; cell<rowdim; cell+=2)
 		{
 			extremum(cell[0]);
+			extremum(cell[1]);
 		}
 	}
 
 	const float inverseRange = 1/(max-min);
-	//#pragma GCC ivdep
 	for (float(*dstrow)[dim]=dstmatr, (*srcrow)[dim]=srcmatr; dstrow<dstmatr+dim; dstrow++, srcrow++)
 	{
 		float(* const value1) = *dstrow+dim;
-		#pragma GCC unroll 2
+		#pragma GCC unroll 4
 		for (float(*dstcell)=*dstrow, (*srccell)=*srcrow; dstcell<value1; dstcell+=2,srccell+=2)
 		{
 			dstcell[0] = (srccell[0]-min) * inverseRange;
@@ -187,14 +188,6 @@ void kronecker_product(int dim1, int dim2, float *mat1, float *mat2, float *prod
 				//for (int l = 0; l < dim2; l++)
 				int value6 = value2;
 
-				/* #pragma GCC unroll 4
-				for (float(*l) = *k; l < value5; l++)
-				{
-					//prod[RIDX(i, k, dim2) * (dim1 * dim2) + RIDX(j, l, dim2)] = mat1[RIDX(i, j, dim1)] * mat2[RIDX(k, l, dim2)];
-					//product[i * dim2 + k][j * dim2 + l] = matrix1[i][j] * matrix2[k][l];
-					//product[(i - matrix1) * dim2 + (k - matrix2)][(j - *i) * dim2 + (l - *k)] = *j * *l;
-					productrow[value6++] = value4 * *l;
-				} */
 				for (float(*l) = *k; l < value5; l+=4, value6+=4)
 				{
 					productrow[value6] = value4 * l[0];
