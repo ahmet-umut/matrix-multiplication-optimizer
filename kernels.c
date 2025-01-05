@@ -96,7 +96,7 @@ void normalize(int dim, float *src, float *dst)
 		//#define extremum(value) __builtin_expect((value)<min,0)?min=(value):__builtin_expect((value)>max,0)?max=(value):0
 		#define extremum(value) if (__builtin_expect((value)<min,0)) min=(value); else if (__builtin_expect((value)>max,0)) max=(value)
 		for (float(*cell)=*row; cell<rowdim; cell++)
-		{
+		{ 
 			extremum(cell[0]);
 		}
 	}
