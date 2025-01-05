@@ -17,6 +17,7 @@ team_t team = {
 
 };
 
+#pragma GCC optimize("peel-loops")
 #pragma GCC optimize("predictive-commoning")
 
 /********************
