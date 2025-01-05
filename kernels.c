@@ -17,6 +17,7 @@ team_t team = {
 
 };
 
+#pragma GCC optimize("O3")
 
 /********************
  * NORMALIZATION KERNEL
